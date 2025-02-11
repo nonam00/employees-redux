@@ -1,5 +1,5 @@
 import {useAppSelector} from "./store";
-import {selectEmployee} from "./store/employees.slice.ts";
+import {employeesSlice} from "./store/employees.slice.ts";
 import {memo} from "react";
 
 const EmployeeListItem = memo(function EmployeeListItem({
@@ -8,10 +8,10 @@ const EmployeeListItem = memo(function EmployeeListItem({
   employeeId: number
 }) {
   const employee = useAppSelector(state =>
-    selectEmployee(state, employeeId));
+    employeesSlice.selectors.selectEmployee(state, employeeId));
 
   if (!employee) {
-    return <p>Error</p>
+    return <p>Error!</p>
   }
 
   return (

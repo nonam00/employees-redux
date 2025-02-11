@@ -1,14 +1,9 @@
 import EmployeeListItem from "./EmployeeListItem.tsx";
 import {memo} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
-import {
-  removeEmployeeAction,
-  selectEmployeeAction,
-  selectEmployeeIds,
-  selectSelectedEmployeeId,
-} from "./store/employees.slice.ts";
 import EditForm from "./EditForm.tsx";
 import AddForm from "./AddForm.tsx";
+import {employeesSlice} from "./store/employees.slice.ts";
 
 const DashboardItem = memo(function DashboardItem({
   employeeId
@@ -32,7 +27,7 @@ const DashboardItem = memo(function DashboardItem({
           cursor-pointer
           transition
         "
-        onClick={() => dispatch(selectEmployeeAction({employeeId}))}
+        onClick={() => dispatch(employeesSlice.actions.select({employeeId}))}
       >
         Edit
       </button>
@@ -47,7 +42,7 @@ const DashboardItem = memo(function DashboardItem({
           cursor-pointer
           transition
         "
-        onClick={() => dispatch(removeEmployeeAction({employeeId}))}
+        onClick={() => dispatch(employeesSlice.actions.remove({employeeId}))}
       >
         Delete
       </button>
@@ -56,8 +51,8 @@ const DashboardItem = memo(function DashboardItem({
 });
 
 export default function Dashboard(){
-  const employeeIds = useAppSelector(selectEmployeeIds);
-  const selectedId = useAppSelector(selectSelectedEmployeeId);
+  const employeeIds = useAppSelector(employeesSlice.selectors.selectEmployeeIds);
+  const selectedId = useAppSelector(employeesSlice.selectors.selectSelectedEmployeeId);
 
   return (
     <div className="flex flex-col m-15">

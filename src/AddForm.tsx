@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useAppDispatch} from "./store";
-import {addEmployeeAction, companies, positions} from "./store/employees.slice.ts";
+import {companies, employeesSlice, positions} from "./store/employees.slice.ts";
 
 export default function AddForm() {
   const [name, setName] = useState("");
@@ -10,7 +10,7 @@ export default function AddForm() {
 
   const dispatch = useAppDispatch();
   function handle() {
-    dispatch(addEmployeeAction({
+    dispatch(employeesSlice.actions.add({
       name,
       position: positions[0],
       company: companies[0]

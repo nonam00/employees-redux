@@ -1,17 +1,17 @@
 import {useAppDispatch, useAppSelector} from "./store";
-import {editEmployeeAction, selectEmployee, selectEmployeeAction} from "./store/employees.slice.ts";
+import {employeesSlice} from "./store/employees.slice.ts";
 import {useState} from "react";
 
 export default function EditForm({employeeId}: {employeeId: number}) {
   const employee = useAppSelector(state =>
-    selectEmployee(state, employeeId));
+    employeesSlice.selectors.selectEmployee(state, employeeId));
   const [name, setName] = useState(employee.name);
   //const [position, setPosition] = useState(employee.position);
   //const [company, setCompany] = useState(employee.company);
   const dispatch = useAppDispatch();
 
   function handleEdit() {
-    dispatch(editEmployeeAction({
+    dispatch(employeesSlice.actions.edit({
       employee: {
         id: employeeId,
         name: name,
@@ -19,11 +19,11 @@ export default function EditForm({employeeId}: {employeeId: number}) {
         company: employee.position
       }
     }));
-    dispatch(selectEmployeeAction({employeeId: undefined}));
+    dispatch(employeesSlice.actions.select({employeeId: undefined}));
   }
 
   function handleCancel() {
-    dispatch(selectEmployeeAction({employeeId: undefined}));
+    dispatch(employeesSlice.actions.select({employeeId: undefined}));
   }
 
   return (

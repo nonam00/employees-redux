@@ -1,9 +1,9 @@
 import EmployeeListItem from "./EmployeeListItem.tsx";
 import {useAppSelector} from "./store";
-import {selectEmployeeIds} from "./store/employees.slice.ts";
+import {employeesSlice} from "./store/employees.slice.ts";
 
 export default function EmployeeList() {
-  const employeeIds = useAppSelector(selectEmployeeIds);
+  const employeeIds = useAppSelector(employeesSlice.selectors.selectEmployeeIds);
   return (
     <div className="flex flex-col items-center justify-center w-200">
       <div className="flex flex-row gap-1 items-center w-full m-3 border-b-1">
