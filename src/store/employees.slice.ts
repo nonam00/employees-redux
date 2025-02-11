@@ -12,7 +12,7 @@ export interface Employee {
   name: string;
   position: Position;
   company: Company;
-  birthday: Date;
+  //birthday: Date;
 }
 export interface Company {
   id: number;
@@ -52,36 +52,42 @@ export const positions: Position[] = [
   }
 ];
 
-export const initialEmployeesState: Employee[] = [
+export const employeesArray: Employee[] = [
   {
     id: 1,
     name: 'Bobby',
-    birthday: new Date(1990, 12, 25),
+    //birthday: new Date(1990, 12, 25),
     position: positions[0],
     company: companies[0]
   },
   {
     id: 2,
     name: 'Sammy',
-    birthday: new Date(1999, 5, 23),
+    //birthday: new Date(1999, 5, 23),
     position: positions[0],
     company: companies[0]
   },
   {
     id: 3,
     name: 'Sally',
-    birthday: new Date(1980, 6, 12),
+    //birthday: new Date(1980, 6, 12),
     position: positions[0],
     company: companies[0]
   },
   {
     id: 4,
     name: 'Reggy',
-    birthday: new Date(2000, 3, 1),
+    //birthday: new Date(2000, 3, 1),
     position: positions[0],
     company: companies[0]
   },
 ];
+
+type EmployeesState = {
+  entities: Record<number, Employee>,
+  ids: number[]
+  selectedEmployeeId: number | undefined,
+}
 
 export const removeEmployeeAction = createAction<{
   employeeId: number;
@@ -92,33 +98,58 @@ export const editEmployeeAction = createAction<{
 }>("employees/update");
 
 export const addEmployeeAction = createAction<{
-  employee: Employee;
+  name: string;
+  position: Position;
+  company: Company;
 }>("employees/add");
 
-export const employeesReducer = createReducer(
-  initialEmployeesState,
+export const selectEmployeeAction = createAction<{
+  employeeId: number | undefined;
+}>("employees/selectEmployee");
+
+export const employeesReducer = createReducer<EmployeesState>(
+  {
+    entities: employeesArray.reduce((acc, employee) => {
+      acc[employee.id] = employee;
+      return acc;
+    }, {} as Record<number, Employee>),
+    ids: employeesArray.map(e => e.id),
+    selectedEmployeeId: undefined
+  },
   (builder) => {
     builder.addCase(removeEmployeeAction, (state, action) => {
       const { employeeId } = action.payload;
-      const index = state.findIndex(employee => employee.id === employeeId);
-      state = state.splice(index, 1)
+      const index = state.ids.findIndex(id => id === employeeId);
+      state.ids.splice(index, 1);
+      delete state.entities[employeeId];
     });
     builder.addCase(addEmployeeAction, (state, action) => {
-      const { employee } = action.payload;
-      state = [...state, employee];
+      const id = state.ids.length + 1;
+      state.ids.push(id);
+      state.entities[id] = {
+        id,
+        ...action.payload
+      };
     });
     builder.addCase(editEmployeeAction, (state, action) => {
       const { employee } = action.payload;
-      const index = state.findIndex(e => e.id === employee.id);
-      state = [
-        ...state.slice(0, index),
-        employee,
-        ...state.slice(index + 1)
-      ]
+      state.entities[employee.id] = { ...employee };
     });
+    builder.addCase(selectEmployeeAction, (state, action) => {
+      const { employeeId } = action.payload;
+      state.selectedEmployeeId = employeeId;
+    })
   }
 );
 
+export const selectEmployeeIds = (state: AppState) => {
+  return state.employees.ids;
+}
+
 export const selectEmployee = (state: AppState, employeeId: number) => {
-  return state.employees.find(employee => employee.id === employeeId);
+  return state.employees.entities[employeeId];
+}
+
+export const selectSelectedEmployeeId = (state: AppState)=> {
+  return state.employees.selectedEmployeeId;
 }

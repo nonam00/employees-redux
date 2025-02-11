@@ -1,7 +1,12 @@
 import {useAppSelector} from "./store";
 import {selectEmployee} from "./store/employees.slice.ts";
+import {memo} from "react";
 
-export default function EmployeeListItem({employeeId}: {employeeId: number}) {
+const EmployeeListItem = memo(function EmployeeListItem({
+  employeeId
+}: {
+  employeeId: number
+}) {
   const employee = useAppSelector(state =>
     selectEmployee(state, employeeId));
 
@@ -15,6 +20,9 @@ export default function EmployeeListItem({employeeId}: {employeeId: number}) {
       <p className="flex-1">{employee.position.title}</p>
       <p className="flex-1">{employee.company.title}</p>
       <p className="flex-1">{employee.position.salary}</p>
+      <p className="flex-1">Empty</p>
     </li>
   )
-}
+});
+
+export default EmployeeListItem;
