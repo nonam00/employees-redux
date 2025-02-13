@@ -1,6 +1,6 @@
+import {memo} from "react";
 import {useAppSelector} from "./store";
 import {employeesSlice} from "./store/employees.slice.ts";
-import {memo} from "react";
 
 const EmployeeListItem = memo(function EmployeeListItem({
   employeeId
@@ -20,7 +20,9 @@ const EmployeeListItem = memo(function EmployeeListItem({
       <p className="flex-1">{employee.position.title}</p>
       <p className="flex-1">{employee.company.title}</p>
       <p className="flex-1">{employee.position.salary}</p>
-      <p className="flex-1">Empty</p>
+      <p className="flex-1">
+        {employee.birthday.day}/{employee.birthday.month}/{employee.birthday.year}
+      </p>
     </li>
   )
 });

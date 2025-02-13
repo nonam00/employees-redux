@@ -5,12 +5,15 @@ export interface Position {
   title: string;
   salary: number;
 }
+
+type CustomDate = { day: number, month: number, year: number };
+
 export interface Employee {
   id: number;
   name: string;
   position: Position;
   company: Company;
-  //birthday: Date;
+  birthday: CustomDate;
 }
 export interface Company {
   id: number;
@@ -40,51 +43,67 @@ export const positions: Position[] = [
   },
   {
     id: 2,
-    title: 'Manager',
-    salary: 30000
+    title: 'Tester',
+    salary: 40000
   },
   {
     id: 3,
-    title: 'Tester',
-    salary: 40000
-  }
+    title: 'Manager',
+    salary: 30000
+  },
 ];
 
 export const employeesArray: Employee[] = [
   {
     id: 1,
     name: 'Bobby',
-    //birthday: new Date(1990, 12, 25),
+    birthday: {
+      day: 25,
+      month: 12,
+      year: 2000
+    },
     position: positions[0],
     company: companies[0]
   },
   {
     id: 2,
     name: 'Sammy',
-    //birthday: new Date(1999, 5, 23),
+    birthday: {
+      day: 25,
+      month: 12,
+      year: 2000
+    },
     position: positions[0],
     company: companies[0]
   },
   {
     id: 3,
     name: 'Sally',
-    //birthday: new Date(1980, 6, 12),
+    birthday: {
+      day: 25,
+      month: 12,
+      year: 2000
+    },
     position: positions[0],
     company: companies[0]
   },
   {
     id: 4,
     name: 'Reggy',
-    //birthday: new Date(2000, 3, 1),
+    birthday: {
+      day: 25,
+      month: 12,
+      year: 2000
+    },
     position: positions[0],
     company: companies[0]
   },
 ];
 
 type EmployeesState = {
-  entities: Record<number, Employee>,
-  ids: number[]
-  selectedEmployeeId: number | undefined,
+  entities: Record<number, Employee>;
+  ids: number[];
+  selectedEmployeeId: number | undefined;
 }
 
 const initialEmployeesState: EmployeesState = {
@@ -115,8 +134,9 @@ export const employeesSlice = createSlice({
       name: string;
       position: Position;
       company: Company;
+      birthday: CustomDate;
     }>) => {
-      const id = state.ids.length + 1;
+      const id = state.ids[state.ids.length - 1] + 1;
       state.ids.push(id);
       state.entities[id] = {
         id,

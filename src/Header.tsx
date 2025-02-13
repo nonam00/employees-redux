@@ -1,6 +1,13 @@
 import {NavLink} from "react-router";
+import {memo} from "react";
 
-function HeaderLink({title, href} : { title: string, href: string }) {
+const HeaderLink = memo(function HeaderLink({
+  title,
+  href
+} : {
+  title: string,
+  href: string
+}) {
   return (
     <li className="group">
       <NavLink to={href}>
@@ -10,7 +17,7 @@ function HeaderLink({title, href} : { title: string, href: string }) {
       </NavLink>
     </li>
   );
-}
+});
 
 export default function Header(){
   return (

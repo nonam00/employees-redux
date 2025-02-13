@@ -1,22 +1,30 @@
+import {FormEvent, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
-import {employeesSlice} from "./store/employees.slice.ts";
-import {useState} from "react";
+import {companies, employeesSlice, positions} from "./store/employees.slice.ts";
 
 export default function EditForm({employeeId}: {employeeId: number}) {
   const employee = useAppSelector(state =>
     employeesSlice.selectors.selectEmployee(state, employeeId));
   const [name, setName] = useState(employee.name);
-  //const [position, setPosition] = useState(employee.position);
-  //const [company, setCompany] = useState(employee.company);
+  const [birthdate, setBirthdate] = useState(`${employee.birthday.year}-${employee.birthday.month}-${employee.birthday.day}`);
+  const [positionId, setPositionId] = useState(employee.position.id - 1);
+  const [companyId, setCompanyId] = useState(employee.company.id - 1);
   const dispatch = useAppDispatch();
 
-  function handleEdit() {
+  function handleEdit(e: FormEvent) {
+    e.preventDefault();
+    const [year, month, day] = birthdate.split("-").map(Number);
     dispatch(employeesSlice.actions.edit({
       employee: {
         id: employeeId,
         name: name,
-        position: employee.position,
-        company: employee.position
+        position: positions[positionId + 1],
+        company: companies[companyId + 1],
+        birthday: {
+          year,
+          month,
+          day
+        }
       }
     }));
     dispatch(employeesSlice.actions.select({employeeId: undefined}));
@@ -27,9 +35,9 @@ export default function EditForm({employeeId}: {employeeId: number}) {
   }
 
   return (
-    <form className="flex flex-col m-10">
+    <form className="flex flex-col m-10" onSubmit={handleEdit}>
       <div className="flex flex-row gap-4">
-        <div className="flex-1">
+        <div className="flex flex-col flex-1">
           <label>Name</label>
           <input
             className="border-1 rounded-sm border-black"
@@ -38,25 +46,35 @@ export default function EditForm({employeeId}: {employeeId: number}) {
           />
         </div>
         <div className="flex flex-col flex-1">
+          <label>Birthdate</label>
+          <input
+            className="border-1 rounded-sm border-black"
+            type="date"
+            value={birthdate}
+            onChange={(e) => setBirthdate(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex flex-col flex-1">
           <label>Company</label>
           <select
             className="border-1 rounded-sm border-black"
-            //value={company}
-            //onChange={(e) => setCompany(e.target.value)}
+            value={companyId}
+            onChange={(e) => setCompanyId(parseInt(e.target.value))}
           >
-            <option>Yandex</option>
-            <option>Mail</option>
+            <option value={0}>Yandex</option>
+            <option value={1}>Ozon</option>
           </select>
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
           <select
             className="border-1 rounded-sm border-black"
-            //value={position}
-            //onChange={(e) => setPosition(e.target.value)}
+            value={positionId}
+            onChange={(e) => setPositionId(parseInt(e.target.value))}
           >
-            <option>Developer</option>
-            <option>Tester</option>
+            <option value={0}>Developer</option>
+            <option value={1}>Tester</option>
           </select>
         </div>
       </div>
@@ -74,8 +92,7 @@ export default function EditForm({employeeId}: {employeeId: number}) {
             cursor-pointer
             transition
           "
-          type="button"
-          onClick={handleEdit}
+          type="submit"
         >
           Edit
         </button>

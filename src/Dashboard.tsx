@@ -1,9 +1,9 @@
-import EmployeeListItem from "./EmployeeListItem.tsx";
 import {memo} from "react";
-import {useAppDispatch, useAppSelector} from "./store";
+import EmployeeListItem from "./EmployeeListItem.tsx";
 import EditForm from "./EditForm.tsx";
 import AddForm from "./AddForm.tsx";
 import {employeesSlice} from "./store/employees.slice.ts";
+import {useAppDispatch, useAppSelector} from "./store";
 
 const DashboardItem = memo(function DashboardItem({
   employeeId
@@ -53,7 +53,6 @@ const DashboardItem = memo(function DashboardItem({
 export default function Dashboard(){
   const employeeIds = useAppSelector(employeesSlice.selectors.selectEmployeeIds);
   const selectedId = useAppSelector(employeesSlice.selectors.selectSelectedEmployeeId);
-
   return (
     <div className="flex flex-col m-15">
       <h1 className="text-3xl m-5">Employees dashboard editor:</h1>
