@@ -1,21 +1,27 @@
 import {FormEvent, memo, useState} from "react";
-import {useAppDispatch} from "./store";
-import {companies, employeesSlice, positions} from "./store/employees.slice.ts";
+import {useAppDispatch, useAppSelector} from "./store";
+import {employeesSlice} from "./store/employees.slice.ts";
+import {companiesSlice} from "./store/companies.slice.ts";
+import {positionsSlice} from "./store/positions.slice.ts";
+import CompanyItem from "./CompanyItem.tsx";
+import PositionItem from "./PositionItem.tsx";
 
 const AddForm = memo(function AddForm() {
+  const companiesIds = useAppSelector(companiesSlice.selectors.selectIds);
+  const positionsIds = useAppSelector(positionsSlice.selectors.selectIds);
+  const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [positionId, setPositionId] = useState<number>(0);
-  const [companyId, setCompanyId] = useState<number>(0);
+  const [positionId, setPositionId] = useState<number>(1);
+  const [companyId, setCompanyId] = useState<number>(1);
 
-  const dispatch = useAppDispatch();
   function handle(e: FormEvent) {
     e.preventDefault();
     const [year, month, day] = birthdate.split('-').map(Number);
     dispatch(employeesSlice.actions.add({
       name,
-      position: positions[positionId],
-      company: companies[companyId],
+      positionId: positionId,
+      companyId: companyId,
       birthday: {
         year,
         month,
@@ -57,8 +63,7 @@ const AddForm = memo(function AddForm() {
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
             required
           >
-            <option value={0}>Yandex</option>
-            <option value={1}>Ozon</option>
+            {companiesIds.map((id) => (<CompanyItem companyId={id} key={id} />))}
           </select>
         </div>
         <div className="flex flex-col flex-1">
@@ -69,8 +74,7 @@ const AddForm = memo(function AddForm() {
             onChange={(e) => setPositionId(parseInt(e.target.value))}
             required
           >
-            <option value={0}>Developer</option>
-            <option value={1}>Tester</option>
+            {positionsIds.map((id) => (<PositionItem positionId={id} key={id} />))}
           </select>
         </div>
       </div>

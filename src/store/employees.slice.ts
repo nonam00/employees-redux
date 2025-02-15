@@ -1,59 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {CustomDate, Employee} from "./types.ts";
 
-export interface Position {
-  id: number;
-  title: string;
-  salary: number;
-}
-
-type CustomDate = { day: number, month: number, year: number };
-
-export interface Employee {
-  id: number;
-  name: string;
-  position: Position;
-  company: Company;
-  birthday: CustomDate;
-}
-export interface Company {
-  id: number;
-  title: string;
-}
-
-export const companies: Company[] = [
-  {
-    id: 1,
-    title: 'Yandex',
-  },
-  {
-    id: 2,
-    title: 'Ozon',
-  },
-  {
-    id: 3,
-    title: 'Sber',
-  }
-];
-
-export const positions: Position[] = [
-  {
-    id: 1,
-    title: 'Developer',
-    salary: 20000
-  },
-  {
-    id: 2,
-    title: 'Tester',
-    salary: 40000
-  },
-  {
-    id: 3,
-    title: 'Manager',
-    salary: 30000
-  },
-];
-
-export const employeesArray: Employee[] = [
+const employeesArray: Employee[] = [
   {
     id: 1,
     name: 'Bobby',
@@ -62,8 +10,8 @@ export const employeesArray: Employee[] = [
       month: 12,
       year: 2000
     },
-    position: positions[0],
-    company: companies[0]
+    positionId: 1,
+    companyId: 1
   },
   {
     id: 2,
@@ -73,8 +21,8 @@ export const employeesArray: Employee[] = [
       month: 12,
       year: 2000
     },
-    position: positions[0],
-    company: companies[0]
+    positionId: 1,
+    companyId: 1
   },
   {
     id: 3,
@@ -84,8 +32,8 @@ export const employeesArray: Employee[] = [
       month: 12,
       year: 2000
     },
-    position: positions[0],
-    company: companies[0]
+    positionId: 1,
+    companyId: 1
   },
   {
     id: 4,
@@ -95,8 +43,8 @@ export const employeesArray: Employee[] = [
       month: 12,
       year: 2000
     },
-    position: positions[0],
-    company: companies[0]
+    positionId: 2,
+    companyId: 1
   },
 ];
 
@@ -132,15 +80,15 @@ export const employeesSlice = createSlice({
     },
     add: (state, action: PayloadAction<{
       name: string;
-      position: Position;
-      company: Company;
+      positionId: number;
+      companyId: number;
       birthday: CustomDate;
     }>) => {
       const id = state.ids[state.ids.length - 1] + 1;
       state.ids.push(id);
       state.entities[id] = {
         id,
-        ...action.payload
+        ...action.payload,
       };
     },
     edit: (state, action: PayloadAction<{employee: Employee}>) => {

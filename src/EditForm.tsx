@@ -1,15 +1,33 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
-import {companies, employeesSlice, positions} from "./store/employees.slice.ts";
+import { employeesSlice} from "./store/employees.slice.ts";
+import {companiesSlice} from "./store/companies.slice.ts";
+import {positionsSlice} from "./store/positions.slice.ts";
+import CompanyItem from "./CompanyItem.tsx";
+import PositionItem from "./PositionItem.tsx";
 
-export default function EditForm({employeeId}: {employeeId: number}) {
+export default function EditForm({
+  employeeId
+}: {
+  employeeId: number
+}) {
   const employee = useAppSelector(state =>
     employeesSlice.selectors.selectEmployee(state, employeeId));
-  const [name, setName] = useState(employee.name);
-  const [birthdate, setBirthdate] = useState(`${employee.birthday.year}-${employee.birthday.month}-${employee.birthday.day}`);
-  const [positionId, setPositionId] = useState(employee.position.id - 1);
-  const [companyId, setCompanyId] = useState(employee.company.id - 1);
+  const companiesIds = useAppSelector(companiesSlice.selectors.selectIds);
+  const positionsIds = useAppSelector(positionsSlice.selectors.selectIds);
   const dispatch = useAppDispatch();
+
+  const [name, setName] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [positionId, setPositionId] = useState<number>(1);
+  const [companyId, setCompanyId] = useState<number>(1);
+
+  useEffect(() => {
+    setName(employee.name);
+    setBirthdate(`${employee.birthday.year}-${employee.birthday.month}-${employee.birthday.day}`);
+    setPositionId(employee.positionId);
+    setCompanyId(employee.companyId);
+  }, [employee]);
 
   function handleEdit(e: FormEvent) {
     e.preventDefault();
@@ -17,9 +35,9 @@ export default function EditForm({employeeId}: {employeeId: number}) {
     dispatch(employeesSlice.actions.edit({
       employee: {
         id: employeeId,
-        name: name,
-        position: positions[positionId + 1],
-        company: companies[companyId + 1],
+        name,
+        positionId,
+        companyId,
         birthday: {
           year,
           month,
@@ -36,7 +54,7 @@ export default function EditForm({employeeId}: {employeeId: number}) {
 
   return (
     <form className="flex flex-col m-10" onSubmit={handleEdit}>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-4 align-middle">
         <div className="flex flex-col flex-1">
           <label>Name</label>
           <input
@@ -62,8 +80,7 @@ export default function EditForm({employeeId}: {employeeId: number}) {
             value={companyId}
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
           >
-            <option value={0}>Yandex</option>
-            <option value={1}>Ozon</option>
+            {companiesIds.map((id) => (<CompanyItem companyId={companyId} key={id} />))}
           </select>
         </div>
         <div className="flex flex-col flex-1">
@@ -73,8 +90,7 @@ export default function EditForm({employeeId}: {employeeId: number}) {
             value={positionId}
             onChange={(e) => setPositionId(parseInt(e.target.value))}
           >
-            <option value={0}>Developer</option>
-            <option value={1}>Tester</option>
+            {positionsIds.map((id) => (<PositionItem positionId={id} key={id} />))}
           </select>
         </div>
       </div>

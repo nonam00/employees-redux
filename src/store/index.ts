@@ -1,12 +1,16 @@
 import {combineReducers, configureStore, createSelector} from "@reduxjs/toolkit";
 import {useDispatch, useSelector, useStore} from "react-redux";
 import {employeesSlice} from "./employees.slice.ts";
+import {companiesSlice} from "./companies.slice.ts";
+import {positionsSlice} from "./positions.slice.ts";
 
 const reducer = combineReducers({
   employees: employeesSlice.reducer,
+  companies: companiesSlice.reducer,
+  positions: positionsSlice.reducer,
 });
 
-export const store = configureStore({
+export const store   = configureStore({
   reducer,
 });
 
