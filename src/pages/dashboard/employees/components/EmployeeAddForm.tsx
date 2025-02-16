@@ -1,14 +1,14 @@
-import {FormEvent, memo, useState} from "react";
-import {useAppDispatch, useAppSelector} from "./store";
-import {employeesSlice} from "./store/employees.slice.ts";
-import {companiesSlice} from "./store/companies.slice.ts";
-import {positionsSlice} from "./store/positions.slice.ts";
-import CompanyItem from "./CompanyItem.tsx";
-import PositionItem from "./PositionItem.tsx";
+import {FormEvent, useState} from "react";
+import {useAppDispatch, useAppSelector} from "@/store";
+import {employeesSlice} from "@/store/employees.slice.ts";
+import {companiesSlice} from "@/store/companies.slice.ts";
+import {positionsSlice} from "@/store/positions.slice.ts";
+import CompanyOptionItem from "./CompanyOptionItem.tsx";
+import PositionOptionItem from "./PositionOptionItem.tsx";
 
-const AddForm = memo(function AddForm() {
-  const companiesIds = useAppSelector(companiesSlice.selectors.selectIds);
-  const positionsIds = useAppSelector(positionsSlice.selectors.selectIds);
+export default function EmployeeAddForm() {
+  const companiesIds = useAppSelector(companiesSlice.selectors.selectCompaniesIds);
+  const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
@@ -63,7 +63,7 @@ const AddForm = memo(function AddForm() {
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
             required
           >
-            {companiesIds.map((id) => (<CompanyItem companyId={id} key={id} />))}
+            {companiesIds.map((id) => (<CompanyOptionItem companyId={id} key={id} />))}
           </select>
         </div>
         <div className="flex flex-col flex-1">
@@ -74,7 +74,7 @@ const AddForm = memo(function AddForm() {
             onChange={(e) => setPositionId(parseInt(e.target.value))}
             required
           >
-            {positionsIds.map((id) => (<PositionItem positionId={id} key={id} />))}
+            {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id} />))}
           </select>
         </div>
       </div>
@@ -88,6 +88,4 @@ const AddForm = memo(function AddForm() {
       </div>
     </form>
   )
-});
-
-export default AddForm;
+};

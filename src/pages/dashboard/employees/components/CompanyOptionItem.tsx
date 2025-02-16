@@ -1,8 +1,8 @@
 import {memo} from "react";
-import {useAppSelector} from "./store";
-import {companiesSlice} from "./store/companies.slice.ts";
+import {useAppSelector} from "@/store";
+import {companiesSlice} from "@/store/companies.slice.ts";
 
-const CompanyItem = memo(function CompanyItem({
+const CompanyOptionItem = memo(function CompanyItem({
   companyId
 }: {
   companyId: number
@@ -14,4 +14,4 @@ const CompanyItem = memo(function CompanyItem({
   )
 })
 
-export default CompanyItem;
+export default CompanyOptionItem;

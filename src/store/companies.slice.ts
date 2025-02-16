@@ -35,8 +35,9 @@ export const companiesSlice = createSlice({
   name: "companies",
   initialState: initialCompaniesState,
   selectors: {
-    selectIds: (state) => state.ids,
+    selectCompaniesIds: (state) => state.ids,
     selectCompany: (state, companyId: number) => state.entities[companyId],
+    selectSelectedCompanyId: (state) => state.selectedCompanyId,
   },
   reducers: {
     add: (state, action: PayloadAction<{title: string}>) => {
@@ -53,11 +54,11 @@ export const companiesSlice = createSlice({
         ...company
       };
     },
-    remove: (state, action: PayloadAction<{id: number}>) => {
-      const { id } = action.payload;
-      const index = state.ids.findIndex((e) => e === id);
+    remove: (state, action: PayloadAction<{companyId: number}>) => {
+      const { companyId } = action.payload;
+      const index = state.ids.findIndex((id) => id === companyId);
       state.ids.splice(index, 1);
-      delete state.ids[index];
+      delete state.entities[companyId];
     },
     select: (state, action: PayloadAction<{companyId: number | undefined}>) => {
       const { companyId } = action.payload;

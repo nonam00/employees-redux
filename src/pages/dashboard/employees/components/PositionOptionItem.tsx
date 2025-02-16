@@ -1,8 +1,8 @@
 import {memo} from "react";
-import {useAppSelector} from "./store";
-import {positionsSlice} from "./store/positions.slice.ts";
+import {useAppSelector} from "@/store";
+import {positionsSlice} from "@/store/positions.slice.ts";
 
-const PositionItem = memo(function PositionItem({
+const PositionOptionItem = memo(function PositionItem({
   positionId,
 }: {
   positionId: number;
@@ -14,4 +14,4 @@ const PositionItem = memo(function PositionItem({
   )
 })
 
-export default PositionItem;
+export default PositionOptionItem;

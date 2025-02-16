@@ -1,6 +1,6 @@
-import EmployeeListItem from "./EmployeeListItem.tsx";
-import {useAppSelector} from "./store";
-import {employeesSlice} from "./store/employees.slice.ts";
+import {useAppSelector} from "@/store";
+import {employeesSlice} from "@/store/employees.slice.ts";
+import EmployeeListItem from "@/components/EmployeeListItem.tsx";
 
 export default function EmployeeList() {
   const employeeIds = useAppSelector(employeesSlice.selectors.selectEmployeeIds);

@@ -38,8 +38,9 @@ export const positionsSlice = createSlice({
   name: "positions",
   initialState: initialPositionsState,
   selectors: {
-    selectIds: (state) => state.ids,
+    selectPositionsIds: (state) => state.ids,
     selectPosition: (state, positionId: number) => state.entities[positionId],
+    selectSelectedPositionId: (state) => state.selectedPositionId
   },
   reducers: {
     add: (state, action: PayloadAction<{
@@ -59,11 +60,11 @@ export const positionsSlice = createSlice({
         ...position
       };
     },
-    remove: (state, action: PayloadAction<{id: number}>) => {
-      const { id } = action.payload;
-      const index = state.ids.findIndex((e) => e === id);
+    remove: (state, action: PayloadAction<{positionId: number}>) => {
+      const { positionId } = action.payload;
+      const index = state.ids.findIndex((id) => id === positionId);
       state.ids.splice(index, 1);
-      delete state.ids[index];
+      delete state.entities[positionId];
     },
     select: (state, action: PayloadAction<{positionId: number | undefined}>) => {
       const { positionId } = action.payload;

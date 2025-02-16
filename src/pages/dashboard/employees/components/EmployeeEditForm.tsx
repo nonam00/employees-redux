@@ -1,20 +1,20 @@
 import {FormEvent, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "./store";
-import { employeesSlice} from "./store/employees.slice.ts";
-import {companiesSlice} from "./store/companies.slice.ts";
-import {positionsSlice} from "./store/positions.slice.ts";
-import CompanyItem from "./CompanyItem.tsx";
-import PositionItem from "./PositionItem.tsx";
+import {useAppDispatch, useAppSelector} from "@/store";
+import { employeesSlice} from "@/store/employees.slice.ts";
+import {companiesSlice} from "@/store/companies.slice.ts";
+import {positionsSlice} from "@/store/positions.slice.ts";
+import CompanyOptionItem from "./CompanyOptionItem.tsx";
+import PositionOptionItem from "./PositionOptionItem.tsx";
 
-export default function EditForm({
+export default function EmployeeEditForm({
   employeeId
 }: {
   employeeId: number
 }) {
   const employee = useAppSelector(state =>
     employeesSlice.selectors.selectEmployee(state, employeeId));
-  const companiesIds = useAppSelector(companiesSlice.selectors.selectIds);
-  const positionsIds = useAppSelector(positionsSlice.selectors.selectIds);
+  const companiesIds = useAppSelector(companiesSlice.selectors.selectCompaniesIds);
+  const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState('');
@@ -80,7 +80,7 @@ export default function EditForm({
             value={companyId}
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
           >
-            {companiesIds.map((id) => (<CompanyItem companyId={companyId} key={id} />))}
+            {companiesIds.map((id) => (<CompanyOptionItem companyId={id} key={id} />))}
           </select>
         </div>
         <div className="flex flex-col flex-1">
@@ -90,7 +90,7 @@ export default function EditForm({
             value={positionId}
             onChange={(e) => setPositionId(parseInt(e.target.value))}
           >
-            {positionsIds.map((id) => (<PositionItem positionId={id} key={id} />))}
+            {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id} />))}
           </select>
         </div>
       </div>
