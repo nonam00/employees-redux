@@ -1,8 +1,8 @@
 import {memo} from "react";
 import {useAppSelector} from "@/store";
-import {employeesSlice} from "@/store/employees.slice.ts";
-import {positionsSlice} from "@/store/positions.slice.ts";
-import {companiesSlice} from "@/store/companies.slice.ts";
+import {employeesSlice} from "@/store/employees.slice";
+import {positionsSlice} from "@/store/positions.slice";
+import {companiesSlice} from "@/store/companies.slice";
 
 const EmployeeListItem = memo(function EmployeeListItem({
   employeeId

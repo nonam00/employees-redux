@@ -1,10 +1,10 @@
 import {memo} from "react";
-import EmployeeListItem from "@/components/EmployeeListItem.tsx";
-import EmployeeEditForm from "./components/EmployeeEditForm.tsx";
-import EmployeeAddForm from "./components/EmployeeAddForm.tsx"
-import {employeesSlice} from "@/store/employees.slice.ts";
+import EmployeeListItem from "@/components/EmployeeListItem";
+import EmployeeEditForm from "./components/EmployeeEditForm";
+import EmployeeAddForm from "./components/EmployeeAddForm"
+import {employeesSlice} from "@/store/employees.slice";
 import {useAppDispatch, useAppSelector} from "@/store";
-import DashboardHeader from "@/components/DashboardHeader.tsx";
+import DashboardHeader from "@/components/DashboardHeader";
 
 const EmployeeDashboardItem = memo(function EmployeeDashboardItem({
   employeeId

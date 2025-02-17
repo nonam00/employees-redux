@@ -1,5 +1,5 @@
-import Header from "@/components/Header.tsx";
-import HeaderLink from "@/components/HeaderLink.tsx";
+import Header from "./Header";
+import HeaderLink from "./HeaderLink";
 
 export default function DashboardHeader() {
   return (

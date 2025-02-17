@@ -1,9 +1,9 @@
 import {memo} from "react";
 import {useAppDispatch, useAppSelector} from "@/store";
-import PositionAddForm from "./components/PositionAddForm.tsx";
-import PositionEditForm from "./components/PositionEditForm.tsx";
-import {positionsSlice} from "@/store/positions.slice.ts";
-import DashboardHeader from "@/components/DashboardHeader.tsx";
+import PositionAddForm from "./components/PositionAddForm";
+import PositionEditForm from "./components/PositionEditForm";
+import {positionsSlice} from "@/store/positions.slice";
+import DashboardHeader from "@/components/DashboardHeader";
 
 const PositionDashboardItem = memo(function PositionDashboardItem({
   positionId

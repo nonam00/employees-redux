@@ -1,11 +1,11 @@
 import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router";
-import EmployeeList from "@/pages/EmployeeList.tsx";
-import EmployeesDashboard from "@/pages/dashboard/employees/EmployeesDashboard.tsx";
-import CompaniesDashboard from "@/pages/dashboard/companies/CompaniesDashboard.tsx";
-import PositionsDashboard from "@/pages/dashboard/positions/PositionsDashboard.tsx";
-import MainHeader from "@/components/MainHeader.tsx";
-import DashboardHeader from "@/components/DashboardHeader.tsx";
+import EmployeeList from "@/pages/EmployeeList";
+import EmployeesDashboard from "@/pages/dashboard/employees/EmployeesDashboard";
+import CompaniesDashboard from "@/pages/dashboard/companies/CompaniesDashboard";
+import PositionsDashboard from "@/pages/dashboard/positions/PositionsDashboard";
+import MainHeader from "@/components/MainHeader";
+import DashboardHeader from '@/components/DashboardHeader';
 
 function App() {
   return (

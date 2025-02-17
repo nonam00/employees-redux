@@ -1,57 +1,18 @@
-import {FormEvent, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/store";
-import { employeesSlice} from "@/store/employees.slice.ts";
-import {companiesSlice} from "@/store/companies.slice.ts";
-import {positionsSlice} from "@/store/positions.slice.ts";
-import CompanyOptionItem from "./CompanyOptionItem.tsx";
-import PositionOptionItem from "./PositionOptionItem.tsx";
+import CompaniesOptions from "./CompaniesOptions.tsx";
+import PositionsOptions from "./PositionsOptions.tsx";
+import {useEmployeeEdit} from "@/hooks/useEmployeeEdit";
 
 export default function EmployeeEditForm({
   employeeId
 }: {
   employeeId: number
 }) {
-  const employee = useAppSelector(state =>
-    employeesSlice.selectors.selectEmployee(state, employeeId));
-  const companiesIds = useAppSelector(companiesSlice.selectors.selectCompaniesIds);
-  const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
-  const dispatch = useAppDispatch();
-
-  const [name, setName] = useState('');
-  const [birthdate, setBirthdate] = useState('');
-  const [positionId, setPositionId] = useState<number>(1);
-  const [companyId, setCompanyId] = useState<number>(1);
-
-  useEffect(() => {
-    setName(employee.name);
-    setBirthdate(`${employee.birthday.year}-${employee.birthday.month}-${employee.birthday.day}`);
-    setPositionId(employee.positionId);
-    setCompanyId(employee.companyId);
-  }, [employee]);
-
-  function handleEdit(e: FormEvent) {
-    e.preventDefault();
-    const [year, month, day] = birthdate.split("-").map(Number);
-    dispatch(employeesSlice.actions.edit({
-      employee: {
-        id: employeeId,
-        name,
-        positionId,
-        companyId,
-        birthday: {
-          year,
-          month,
-          day
-        }
-      }
-    }));
-    dispatch(employeesSlice.actions.select({employeeId: undefined}));
-  }
-
-  function handleCancel() {
-    dispatch(employeesSlice.actions.select({employeeId: undefined}));
-  }
-
+  const {
+    handleEdit, handleCancel,
+    employee,
+    setName, setBirthday, setPositionId, setCompanyId,
+    isPending
+  } = useEmployeeEdit(employeeId);
   return (
     <form className="flex flex-col m-10" onSubmit={handleEdit}>
       <div className="flex flex-row gap-4 align-middle">
@@ -59,8 +20,9 @@ export default function EmployeeEditForm({
           <label>Name</label>
           <input
             className="border-1 rounded-sm border-black"
-            value={name}
+            value={employee.name}
             onChange={(e) => setName(e.target.value)}
+            disabled={isPending}
           />
         </div>
         <div className="flex flex-col flex-1">
@@ -68,8 +30,9 @@ export default function EmployeeEditForm({
           <input
             className="border-1 rounded-sm border-black"
             type="date"
-            value={birthdate}
-            onChange={(e) => setBirthdate(e.target.value)}
+            value={employee.birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            disabled={isPending}
             required
           />
         </div>
@@ -77,20 +40,22 @@ export default function EmployeeEditForm({
           <label>Company</label>
           <select
             className="border-1 rounded-sm border-black"
-            value={companyId}
+            value={employee.companyId}
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
+            disabled={isPending}
           >
-            {companiesIds.map((id) => (<CompanyOptionItem companyId={id} key={id} />))}
+            <CompaniesOptions />
           </select>
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
           <select
             className="border-1 rounded-sm border-black"
-            value={positionId}
+            value={employee.positionId}
             onChange={(e) => setPositionId(parseInt(e.target.value))}
+            disabled={isPending}
           >
-            {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id} />))}
+            <PositionsOptions />
           </select>
         </div>
       </div>
@@ -108,6 +73,7 @@ export default function EmployeeEditForm({
             cursor-pointer
             transition
           "
+          disabled={isPending}
           type="submit"
         >
           Edit
@@ -126,6 +92,7 @@ export default function EmployeeEditForm({
             transition
           "
           type="button"
+          disabled={isPending}
           onClick={handleCancel}
         >
           Cancel

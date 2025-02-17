@@ -1,40 +1,15 @@
-import {FormEvent, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/store";
-import {positionsSlice} from "@/store/positions.slice.ts";
+import {usePositionEdit} from "@/hooks/usePositionEdit";
 
 export default function PositionEditForm({
   positionId
 }: {
   positionId: number
 }) {
-  const position = useAppSelector(state =>
-    positionsSlice.selectors.selectPosition(state, positionId));
-  const dispatch = useAppDispatch();
-
-  const [title, setTitle] = useState('');
-  const [salary, setSalary] = useState(1);
-
-  useEffect(() => {
-    setTitle(position.title);
-    setSalary(position.salary);
-  }, [position]);
-
-  function handleEdit(e: FormEvent) {
-    e.preventDefault();
-    dispatch(positionsSlice.actions.edit({
-      position: {
-        id: position.id,
-        title,
-        salary
-      }
-    }));
-    dispatch(positionsSlice.actions.select({positionId: undefined}));
-  }
-
-  function handleCancel() {
-    dispatch(positionsSlice.actions.select({positionId: undefined}));
-  }
-
+  const {
+    handleEdit, handleCancel,
+    position, setTitle, setSalary,
+    isPending
+  } = usePositionEdit(positionId);
   return (
     <form className="flex flex-col m-10" onSubmit={handleEdit}>
       <div className="flex flex-row gap-4 align-middle">
@@ -42,18 +17,21 @@ export default function PositionEditForm({
           <label>Title</label>
           <input
             className="border-1 rounded-sm border-black"
-            value={title}
+            value={position.title}
             onChange={(e) => setTitle(e.target.value)}
+            disabled={isPending}
+            required
           />
         </div>
         <div className="flex flex-col flex-1">
-          <label>Title</label>
+          <label>Salary</label>
           <input
             className="border-1 rounded-sm border-black"
             type="number"
-            value={salary}
+            value={position.salary}
             onChange={(e) => setSalary(parseInt(e.target.value))}
             min={1}
+            disabled={isPending}
             required
           />
         </div>
@@ -73,6 +51,7 @@ export default function PositionEditForm({
             transition
           "
           type="submit"
+          disabled={isPending}
         >
           Edit
         </button>
@@ -90,6 +69,7 @@ export default function PositionEditForm({
             transition
           "
           type="button"
+          disabled={isPending}
           onClick={handleCancel}
         >
           Cancel

@@ -1,9 +1,9 @@
 import {memo} from "react";
-import {companiesSlice} from "@/store/companies.slice.ts";
+import {companiesSlice} from "@/store/companies.slice";
 import {useAppDispatch, useAppSelector} from "@/store";
-import CompanyAddForm from "./components/CompanyAddForm.tsx";
-import CompanyEditForm from "./components/CompanyEditForm.tsx";
-import DashboardHeader from "@/components/DashboardHeader.tsx";
+import CompanyAddForm from "./components/CompanyAddForm";
+import CompanyEditForm from "./components/CompanyEditForm";
+import DashboardHeader from "@/components/DashboardHeader";
 
 const CompanyDashboardItem = memo(function CompanyDashboardItem({
   companyId

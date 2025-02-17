@@ -1,5 +1,5 @@
-import Header from "./Header.tsx";
-import HeaderLink from "./HeaderLink.tsx";
+import Header from "./Header";
+import HeaderLink from "./HeaderLink";
 
 export default function MainHeader(){
   return (

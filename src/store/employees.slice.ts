@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CustomDate, Employee} from "./types.ts";
+import {CustomDate, Employee} from "./types";
 
 const employeesArray: Employee[] = [
   {

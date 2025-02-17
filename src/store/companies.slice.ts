@@ -1,4 +1,4 @@
-import {Company} from "./types.ts";
+import {Company} from "./types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialCompaniesArray: Company[] = [

@@ -1,4 +1,4 @@
-import {Position} from "./types.ts";
+import {Position} from "./types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialPositionsArray: Position[] = [

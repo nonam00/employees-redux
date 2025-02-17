@@ -1,37 +1,11 @@
-import {FormEvent, useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/store";
-import {companiesSlice} from "@/store/companies.slice.ts";
+import {useCompanyEdit} from "@/hooks/useCompanyEdit";
 
 export default function CompanyEditForm({
   companyId
 }: {
   companyId: number
 }) {
-  const company = useAppSelector(state =>
-    companiesSlice.selectors.selectCompany(state, companyId));
-  const dispatch = useAppDispatch();
-
-  const [title, setTitle] = useState('');
-
-  useEffect(() => {
-    setTitle(company.title);
-  }, [company]);
-
-  function handleEdit(e: FormEvent) {
-    e.preventDefault();
-    dispatch(companiesSlice.actions.edit({
-      company: {
-        id: company.id,
-        title
-      }
-    }));
-    dispatch(companiesSlice.actions.select({companyId: undefined}));
-  }
-
-  function handleCancel() {
-    dispatch(companiesSlice.actions.select({companyId: undefined}));
-  }
-
+  const {title, setTitle, isPending, handleEdit, handleCancel} = useCompanyEdit(companyId);
   return (
     <form className="flex flex-col m-10" onSubmit={handleEdit}>
       <div className="flex flex-row gap-4 align-middle">
@@ -40,6 +14,7 @@ export default function CompanyEditForm({
           <input
             className="border-1 rounded-sm border-black"
             value={title}
+            disabled={isPending}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -59,11 +34,12 @@ export default function CompanyEditForm({
             transition
           "
           type="submit"
+          disabled={isPending}
         >
           Edit
         </button>
         <button
-          className="
+          className={`
             rounded-sm
             px-3
             py-1
@@ -74,8 +50,10 @@ export default function CompanyEditForm({
             hover:text-white
             cursor-pointer
             transition
-          "
+            ${isPending ? 'bg-gray-100' : ''}
+          `}
           type="button"
+          disabled={isPending}
           onClick={handleCancel}
         >
           Cancel

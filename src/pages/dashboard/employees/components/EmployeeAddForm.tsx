@@ -1,34 +1,13 @@
-import {FormEvent, useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/store";
-import {employeesSlice} from "@/store/employees.slice.ts";
-import {companiesSlice} from "@/store/companies.slice.ts";
-import {positionsSlice} from "@/store/positions.slice.ts";
-import CompanyOptionItem from "./CompanyOptionItem.tsx";
-import PositionOptionItem from "./PositionOptionItem.tsx";
+import PositionsOptions from "./PositionsOptions";
+import CompaniesOptions from "./CompaniesOptions";
+import {useEmployeeAdd} from "@/hooks/useEmployeeAdd";
 
 export default function EmployeeAddForm() {
-  const companiesIds = useAppSelector(companiesSlice.selectors.selectCompaniesIds);
-  const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
-  const dispatch = useAppDispatch();
-  const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [positionId, setPositionId] = useState<number>(1);
-  const [companyId, setCompanyId] = useState<number>(1);
-
-  function handle(e: FormEvent) {
-    e.preventDefault();
-    const [year, month, day] = birthdate.split('-').map(Number);
-    dispatch(employeesSlice.actions.add({
-      name,
-      positionId: positionId,
-      companyId: companyId,
-      birthday: {
-        year,
-        month,
-        day
-      }
-    }));
-  }
+  const {
+    handle,
+    setName, setBirthdate, setPositionId, setCompanyId,
+    isPending
+  } = useEmployeeAdd();
 
   return (
     <form
@@ -40,8 +19,8 @@ export default function EmployeeAddForm() {
           <label>Name</label>
           <input
             className="border-1 rounded-sm border-black"
-            value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={isPending}
             required
           />
         </div>
@@ -50,8 +29,8 @@ export default function EmployeeAddForm() {
           <input
             className="border-1 rounded-sm border-black"
             type="date"
-            value={birthdate}
             onChange={(e) => setBirthdate(e.target.value)}
+            disabled={isPending}
             required
           />
         </div>
@@ -59,28 +38,29 @@ export default function EmployeeAddForm() {
           <label>Company</label>
           <select
             className="border-1 rounded-sm border-black"
-            value={companyId}
             onChange={(e) => setCompanyId(parseInt(e.target.value))}
+            disabled={isPending}
             required
           >
-            {companiesIds.map((id) => (<CompanyOptionItem companyId={id} key={id} />))}
+            <CompaniesOptions />
           </select>
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
           <select
             className="border-1 rounded-sm border-black"
-            value={positionId}
             onChange={(e) => setPositionId(parseInt(e.target.value))}
+            disabled={isPending}
             required
           >
-            {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id} />))}
+            <PositionsOptions />
           </select>
         </div>
       </div>
       <div>
         <button
           className="border-1 border-black rounded-sm px-3 py-1 m-1 hover:bg-gray-100"
+          disabled={isPending}
           type="submit"
         >
           Add
