@@ -47,7 +47,7 @@ export const positionsSlice = createSlice({
       title: string,
       salary: number
     }>) => {
-      const id =  state.ids[state.ids.length - 1] + 1;
+      const id = state.ids.map(i => i).sort()[state.ids.length - 1];
       state.ids.push(id);
       state.entities[id] = {
         id,

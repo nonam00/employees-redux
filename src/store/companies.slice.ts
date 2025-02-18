@@ -41,7 +41,8 @@ export const companiesSlice = createSlice({
   },
   reducers: {
     add: (state, action: PayloadAction<{title: string}>) => {
-      const id =  state.ids[state.ids.length - 1] + 1;
+      //const id =  state.ids[state.ids.length - 1] + 1;
+      const id = state.ids.map(i => i).sort()[state.ids.length - 1];
       state.ids.push(id);
       state.entities[id] = {
         id,
