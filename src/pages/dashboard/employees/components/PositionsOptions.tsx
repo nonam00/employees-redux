@@ -1,4 +1,4 @@
-import {memo} from "react";
+import {memo, useEffect} from "react";
 import {useAppSelector} from "@/store";
 import {positionsSlice} from "@/store/positions.slice";
 
@@ -14,11 +14,25 @@ const PositionOptionItem = memo(function PositionOptionItem({
   )
 })
 
-export default function PositionsOptions() {
+export default function PositionsOptions({
+  isPending,
+  setPositionIdCallback
+}: {
+  isPending: boolean;
+  setPositionIdCallback: (value: number) => void
+}) {
   const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
+  useEffect(() => {
+    setPositionIdCallback(positionsIds[0])
+  }, [positionsIds, setPositionIdCallback]);
   return (
-    <>
-      {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id} />))}
-    </>
-  )
+    <select
+      className="border-1 rounded-sm border-black"
+      value={positionsIds[0]}
+      onChange={(e) => setPositionIdCallback(parseInt(e.target.value))}
+      disabled={isPending}
+    >
+      {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id}/>))}
+    </select>
+  );
 }

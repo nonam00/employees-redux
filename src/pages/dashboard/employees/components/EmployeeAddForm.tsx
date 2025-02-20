@@ -47,14 +47,10 @@ export default function EmployeeAddForm() {
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
-          <select
-            className="border-1 rounded-sm border-black"
-            onChange={(e) => setPositionId(parseInt(e.target.value))}
-            disabled={isPending}
-            required
-          >
-            <PositionsOptions />
-          </select>
+          <PositionsOptions
+            setPositionIdCallback={setPositionId}
+            isPending={isPending}
+          />
         </div>
       </div>
       <div>

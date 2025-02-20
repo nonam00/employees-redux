@@ -7,7 +7,7 @@ export const useEmployeeAdd = () => {
 
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [positionId, setPositionId] = useState<number>(1);
+  const [positionId, setPositionId] = useState<number>(0);
   const [companyId, setCompanyId] = useState<number>(1);
 
   const [isPending, startTransition] = useTransition();
@@ -26,6 +26,8 @@ export const useEmployeeAdd = () => {
           day
         }
       }))
+      setName("");
+      setBirthdate("");
     })
   }
 

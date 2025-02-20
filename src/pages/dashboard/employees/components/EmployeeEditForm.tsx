@@ -49,14 +49,10 @@ export default function EmployeeEditForm({
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
-          <select
-            className="border-1 rounded-sm border-black"
-            value={employee.positionId}
-            onChange={(e) => setPositionId(parseInt(e.target.value))}
-            disabled={isPending}
-          >
-            <PositionsOptions />
-          </select>
+          <PositionsOptions
+            isPending={isPending}
+            setPositionIdCallback={setPositionId}
+          />
         </div>
       </div>
       <div className="flex flex-row justify-center">
