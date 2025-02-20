@@ -1,6 +1,6 @@
 import {useAppDispatch, useAppSelector} from "@/store";
 import {companiesSlice} from "@/store/companies.slice";
-import {FormEvent, useLayoutEffect, useState, useTransition} from "react";
+import {FormEvent, useCallback, useLayoutEffect, useState, useTransition} from "react";
 
 export const useCompanyEdit = (
   companyId: number
@@ -10,6 +10,7 @@ export const useCompanyEdit = (
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState('');
+
   const [isPending, startTransition] = useTransition();
 
   useLayoutEffect(() => {
@@ -34,11 +35,11 @@ export const useCompanyEdit = (
     })
   }
 
-  function handleCancel() {
+  const handleCancel = useCallback(() => {
     startTransition(() => {
       dispatch(companiesSlice.actions.select({companyId: undefined}));
     })
-  }
+  }, [dispatch]);
 
   return {title, setTitle, isPending, handleEdit, handleCancel};
 }

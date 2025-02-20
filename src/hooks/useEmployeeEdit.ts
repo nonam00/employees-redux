@@ -1,6 +1,6 @@
+import {FormEvent, useCallback, useLayoutEffect, useState, useTransition} from "react";
 import {useAppDispatch, useAppSelector} from "@/store";
 import {employeesSlice} from "@/store/employees.slice.ts";
-import {FormEvent, useLayoutEffect, useState, useTransition} from "react";
 
 export const useEmployeeEdit = (
   employeeId: number
@@ -14,14 +14,22 @@ export const useEmployeeEdit = (
   const [positionId, setPositionId] = useState<number>(1);
   const [companyId, setCompanyId] = useState<number>(1);
 
-  useLayoutEffect(() => {
-    setName(employee.name);
-    setBirthday(`${employee.birthday.year}-${employee.birthday.month}-${employee.birthday.day}`);
-    setPositionId(employee.positionId);
-    setCompanyId(employee.companyId);
-  }, [employee]);
-
   const [isPending, startTransition] = useTransition();
+
+  useLayoutEffect(() => {
+    startTransition(() => {
+      setName(employee.name);
+
+      const {year, month, day} = employee.birthday;
+      const monthStr = month > 10 ? month : "0" + month.toString();
+      const dayStr = day > 10 ? day : "0" + day.toString();
+
+      setBirthday(`${year}-${monthStr}-${dayStr}`);
+
+      setPositionId(employee.positionId);
+      setCompanyId(employee.companyId);
+    })
+  }, [employee]);
 
   function handleEdit(e: FormEvent) {
     startTransition(() => {
@@ -44,11 +52,11 @@ export const useEmployeeEdit = (
     })
   }
 
-  function handleCancel() {
+  const handleCancel = useCallback(() => {
     startTransition(() => {
       dispatch(employeesSlice.actions.select({employeeId: undefined}))
     })
-  }
+  }, [dispatch]);
 
   return {
     handleEdit, handleCancel,

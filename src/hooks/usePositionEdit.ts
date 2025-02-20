@@ -1,6 +1,6 @@
+import {FormEvent, useCallback, useLayoutEffect, useState, useTransition} from "react";
 import {useAppDispatch, useAppSelector} from "@/store";
 import {positionsSlice} from "@/store/positions.slice.ts";
-import {FormEvent, useLayoutEffect, useState, useTransition} from "react";
 
 export const usePositionEdit = (
   positionId: number
@@ -15,8 +15,10 @@ export const usePositionEdit = (
   const [isPending, startTransition] = useTransition();
 
   useLayoutEffect(() => {
-    setTitle(position.title);
-    setSalary(position.salary);
+    startTransition(() => {
+      setTitle(position.title);
+      setSalary(position.salary);
+    })
   }, [position]);
 
   function handleEdit(e: FormEvent) {
@@ -33,11 +35,11 @@ export const usePositionEdit = (
     })
   }
 
-  function handleCancel() {
+  const handleCancel = useCallback(() => {
     startTransition(() => {
       dispatch(positionsSlice.actions.select({positionId: undefined}));
     })
-  }
+  }, [dispatch]);
 
   return {
     handleEdit, handleCancel,
