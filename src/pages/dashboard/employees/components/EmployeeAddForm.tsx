@@ -1,6 +1,7 @@
 import PositionsOptions from "./PositionsOptions";
 import CompaniesOptions from "./CompaniesOptions";
 import {useEmployeeAdd} from "@/hooks/useEmployeeAdd";
+import {FormEvent, useRef} from "react";
 
 export default function EmployeeAddForm() {
   const {
@@ -8,10 +9,20 @@ export default function EmployeeAddForm() {
     setName, setBirthdate, setPositionId, setCompanyId,
     isPending
   } = useEmployeeAdd();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    handle();
+    formRef.current?.reset();
+  }
+
   return (
     <form
       className="flex flex-col m-10"
-      onSubmit={handle}
+      ref={formRef}
+      onSubmit={handleSubmit}
     >
       <div className="flex flex-row gap-4">
         <div className="flex flex-col flex-1">

@@ -21,8 +21,8 @@ export const useEmployeeEdit = (
       setName(employee.name);
 
       const {year, month, day} = employee.birthday;
-      const monthStr = month > 10 ? month : "0" + month.toString();
-      const dayStr = day > 10 ? day : "0" + day.toString();
+      const monthStr = month >= 10 ? month : "0" + month.toString();
+      const dayStr = day >= 10 ? day : "0" + day.toString();
 
       setBirthday(`${year}-${monthStr}-${dayStr}`);
 

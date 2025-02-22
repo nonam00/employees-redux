@@ -14,6 +14,7 @@ export default function CompanyAddForm() {
       dispatch(companiesSlice.actions.add({
         title
       }));
+      setTitle("");
     })
   }
 

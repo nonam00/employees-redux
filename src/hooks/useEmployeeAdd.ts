@@ -1,4 +1,4 @@
-import {FormEvent, useState, useTransition} from "react";
+import {useState, useTransition} from "react";
 import {useAppDispatch} from "@/store";
 import {employeesSlice} from "@/store/employees.slice";
 
@@ -12,9 +12,8 @@ export const useEmployeeAdd = () => {
 
   const [isPending, startTransition] = useTransition();
 
-  function handle(e: FormEvent) {
+  function handle() {
     startTransition(() => {
-      e.preventDefault();
       const [year, month, day] = birthdate.split('-').map(Number);
       dispatch(employeesSlice.actions.add({
         name,
@@ -26,8 +25,6 @@ export const useEmployeeAdd = () => {
           day
         }
       }))
-      setName("");
-      setBirthdate("");
     })
   }
 

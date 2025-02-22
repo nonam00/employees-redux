@@ -1,4 +1,4 @@
-import {FormEvent, useState, useTransition} from "react";
+import {FormEvent, useRef, useState, useTransition} from "react";
 import {useAppDispatch} from "@/store";
 import {positionsSlice} from "@/store/positions.slice";
 
@@ -6,23 +6,27 @@ export default function PositionAddForm() {
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState("");
-  const [salary, setSalary] = useState(1);
+  const [salary, setSalary] = useState("");
 
   const [isPending, startTransition] = useTransition();
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   function handle(e: FormEvent) {
     startTransition(() => {
       e.preventDefault();
       dispatch(positionsSlice.actions.add({
         title,
-        salary,
+        salary: parseInt(salary)
       }));
+      formRef.current?.reset()
     })
   }
 
   return (
     <form
       className="flex flex-col m-10"
+      ref={formRef}
       onSubmit={handle}
     >
       <div className="flex flex-row gap-4">
@@ -30,7 +34,6 @@ export default function PositionAddForm() {
           <label>Title</label>
           <input
             className="border-1 rounded-sm border-black"
-            value={title}
             onChange={(e) => setTitle(e.target.value)}
             disabled={isPending}
             required
@@ -41,8 +44,7 @@ export default function PositionAddForm() {
           <input
             className="border-1 rounded-sm border-black"
             type="number"
-            value={salary}
-            onChange={(e) => setSalary(parseInt(e.target.value))}
+            onChange={(e) => setSalary(e.target.value)}
             min={1}
             disabled={isPending}
             required
