@@ -72,12 +72,6 @@ export const employeesSlice = createSlice({
     selectSelectedEmployeeId: (state) => state.selectedEmployeeId
   },
   reducers: {
-    remove: (state, action: PayloadAction<{employeeId: number}>) => {
-      const { employeeId } = action.payload;
-      const index = state.ids.findIndex(id => id === employeeId);
-      state.ids.splice(index, 1);
-      delete state.entities[employeeId];
-    },
     add: (state, action: PayloadAction<{
       name: string;
       positionId: number;
@@ -85,7 +79,7 @@ export const employeesSlice = createSlice({
       birthday: CustomDate;
     }>) => {
       //const id = state.ids[state.ids.length - 1] + 1;
-      const id = state.ids.map(i => i).sort()[state.ids.length - 1];
+      const id = state.ids.map(i => i).sort()[state.ids.length - 1] + 1;
       state.ids.push(id);
       state.entities[id] = {
         id,
@@ -95,6 +89,15 @@ export const employeesSlice = createSlice({
     edit: (state, action: PayloadAction<{employee: Employee}>) => {
       const { employee } = action.payload;
       state.entities[employee.id] = { ...employee };
+    },
+    remove: (state, action: PayloadAction<{employeeId: number}>) => {
+      const { employeeId } = action.payload;
+      const index = state.ids.findIndex(id => id === employeeId);
+      state.ids.splice(index, 1);
+      if (state.selectedEmployeeId === employeeId) {
+        state.selectedEmployeeId = undefined;
+      }
+      delete state.entities[employeeId];
     },
     select: (state, action: PayloadAction<{employeeId: number | undefined}>) => {
       const { employeeId } = action.payload;

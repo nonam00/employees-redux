@@ -10,16 +10,20 @@ const PositionOptionItem = memo(function PositionOptionItem({
   const position = useAppSelector(state =>
     positionsSlice.selectors.selectPosition(state, positionId));
   return (
-    <option value={positionId}>{position.title} ({position.salary})</option>
+    <option value={positionId}>
+      {position.title} ({position.salary})
+    </option>
   )
 })
 
 export default function PositionsOptions({
   isPending,
-  setPositionIdCallback
+  setPositionIdCallback,
+  value
 }: {
   isPending: boolean;
-  setPositionIdCallback: (value: number) => void
+  setPositionIdCallback: (id: number) => void;
+  value?: number
 }) {
   const positionsIds = useAppSelector(positionsSlice.selectors.selectPositionsIds);
   useEffect(() => {
@@ -28,11 +32,16 @@ export default function PositionsOptions({
   return (
     <select
       className="border-1 rounded-sm border-black"
-      value={positionsIds[0]}
+      value={value ?? positionsIds[0]}
       onChange={(e) => setPositionIdCallback(parseInt(e.target.value))}
       disabled={isPending}
     >
-      {positionsIds.map((id) => (<PositionOptionItem positionId={id} key={id}/>))}
+      {positionsIds.map((id) => (
+        <PositionOptionItem
+          positionId={id}
+          key={id}
+        />
+      ))}
     </select>
   );
 }

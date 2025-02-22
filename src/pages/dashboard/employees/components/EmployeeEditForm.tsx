@@ -38,20 +38,18 @@ export default function EmployeeEditForm({
         </div>
         <div className="flex flex-col flex-1">
           <label>Company</label>
-          <select
-            className="border-1 rounded-sm border-black"
+          <CompaniesOptions
+            isPending={isPending}
+            setCompanyIdCallback={setCompanyId}
             value={employee.companyId}
-            onChange={(e) => setCompanyId(parseInt(e.target.value))}
-            disabled={isPending}
-          >
-            <CompaniesOptions />
-          </select>
+          />
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
           <PositionsOptions
             isPending={isPending}
             setPositionIdCallback={setPositionId}
+            value={employee.positionId}
           />
         </div>
       </div>

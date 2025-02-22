@@ -41,8 +41,7 @@ export const companiesSlice = createSlice({
   },
   reducers: {
     add: (state, action: PayloadAction<{title: string}>) => {
-      //const id =  state.ids[state.ids.length - 1] + 1;
-      const id = state.ids.map(i => i).sort()[state.ids.length - 1];
+      const id = state.ids.map(i => i).sort()[state.ids.length - 1] + 1;
       state.ids.push(id);
       state.entities[id] = {
         id,
@@ -59,6 +58,9 @@ export const companiesSlice = createSlice({
       const { companyId } = action.payload;
       const index = state.ids.findIndex((id) => id === companyId);
       state.ids.splice(index, 1);
+      if (state.selectedCompanyId === companyId) {
+        state.selectedCompanyId = undefined;
+      }
       delete state.entities[companyId];
     },
     select: (state, action: PayloadAction<{companyId: number | undefined}>) => {

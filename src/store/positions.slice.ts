@@ -47,7 +47,7 @@ export const positionsSlice = createSlice({
       title: string,
       salary: number
     }>) => {
-      const id = state.ids.map(i => i).sort()[state.ids.length - 1];
+      const id = state.ids.map(i => i).sort()[state.ids.length - 1] + 1;
       state.ids.push(id);
       state.entities[id] = {
         id,
@@ -64,6 +64,9 @@ export const positionsSlice = createSlice({
       const { positionId } = action.payload;
       const index = state.ids.findIndex((id) => id === positionId);
       state.ids.splice(index, 1);
+      if (state.selectedPositionId === positionId) {
+        state.selectedPositionId = undefined;
+      }
       delete state.entities[positionId];
     },
     select: (state, action: PayloadAction<{positionId: number | undefined}>) => {

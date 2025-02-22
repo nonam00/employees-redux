@@ -8,7 +8,6 @@ export default function EmployeeAddForm() {
     setName, setBirthdate, setPositionId, setCompanyId,
     isPending
   } = useEmployeeAdd();
-
   return (
     <form
       className="flex flex-col m-10"
@@ -36,20 +35,16 @@ export default function EmployeeAddForm() {
         </div>
         <div className="flex flex-col flex-1">
           <label>Company</label>
-          <select
-            className="border-1 rounded-sm border-black"
-            onChange={(e) => setCompanyId(parseInt(e.target.value))}
-            disabled={isPending}
-            required
-          >
-            <CompaniesOptions />
-          </select>
+          <CompaniesOptions
+            isPending={isPending}
+            setCompanyIdCallback={setCompanyId}
+          />
         </div>
         <div className="flex flex-col flex-1">
           <label>Position</label>
           <PositionsOptions
-            setPositionIdCallback={setPositionId}
             isPending={isPending}
+            setPositionIdCallback={setPositionId}
           />
         </div>
       </div>
